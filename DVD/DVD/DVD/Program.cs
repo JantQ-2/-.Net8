@@ -10,7 +10,7 @@ namespace DVD
        
         static void Main(String[] args)
         {
-            Vector2 Position = new Vector2(100, 100);
+            Vector2 Position = new Vector2(400, 400);
             Vector2 suunta = new Vector2(1, -1);
             
             float nopeus = 50f;
