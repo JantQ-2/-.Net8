@@ -7,7 +7,18 @@ namespace DVD
 {
     internal class Program
     {
-       
+
+        static Color GetRandomColor()
+        {
+            Random random = new Random();
+            return new Color(
+                random.Next(256), 
+                random.Next(256), 
+                random.Next(256), 
+                255
+            );
+        }
+
         static void Main(String[] args)
         {
             Vector2 Position = new Vector2(400, 400);
@@ -15,6 +26,7 @@ namespace DVD
             
             float nopeus = 50f;
             string teksti = "DVD";
+
             
             Raylib.InitWindow(800, 800, "DVD");
 
@@ -22,9 +34,10 @@ namespace DVD
             int width = Raylib.GetScreenWidth();
             int height = Raylib.GetScreenHeight();
 
+            Color textColor = Color.Yellow;
             
             int fontSize = 40;
-            Vector2 textSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), teksti, fontSize, 1);
+            Vector2 textSize = Raylib.MeasureTextEx(Raylib.GetFontDefault(), teksti, fontSize, 2);
 
             while (!Raylib.WindowShouldClose())
             {
@@ -36,21 +49,25 @@ namespace DVD
                 if (Position.X + textSize.X >= width || Position.X <= 0)
                 {
                     suunta = new Vector2(suunta.X * -1, suunta.Y);
-                    Position.X = Math.Clamp(Position.X, 0, width - textSize.X); 
+                    Position.X = Math.Clamp(Position.X, 0, width - textSize.X);
+
+                    textColor = GetRandomColor();
                 }
 
                 // Törmäystarkistus ylhäällä ja alhaalla
                 if (Position.Y + textSize.Y >= height || Position.Y <= 0)
                 {
                     suunta = new Vector2(suunta.X, suunta.Y * -1); 
-                    Position.Y = Math.Clamp(Position.Y, 0, height - textSize.Y); 
+                    Position.Y = Math.Clamp(Position.Y, 0, height - textSize.Y);
+
+                    textColor = GetRandomColor();
                 }
 
                 Raylib.BeginDrawing();
 
                 Raylib.ClearBackground(Color.Black);
 
-                Raylib.DrawText(teksti, (int)Position.X, (int)Position.Y, fontSize, Color.Yellow);
+                Raylib.DrawTextEx(Raylib.GetFontDefault(), teksti, Position, fontSize, 2, textColor);
 
                 Raylib.EndDrawing();
             }
