@@ -30,20 +30,25 @@ namespace Pong
         private static int mailanKorkeus = 50;
 
         //Pallon ominaisuudet
-        private static int pallonNopeus = 20;
+        private static int pallonNopeus = 200;
         static Vector2 pallonSuunta = new Vector2(1, -1); 
-        static Vector2 pallonAlkupiste = new Vector2(screenWidth /2, screenHeight /2);
+        static Vector2 pallonSijainti = new Vector2(screenWidth /2, screenHeight /2);
 
         static void Main(String[] args)
         {
             Raylib.SetTargetFPS(60);
 
-            float frameTime = Raylib.GetFrameTime();
+
 
             Raylib.InitWindow((int)screenWidth, (int)screenHeight, "Pong");
 
             while (!Raylib.WindowShouldClose())
             {
+
+                float frameTime = Raylib.GetFrameTime();
+
+                pallonSijainti += pallonSuunta * pallonNopeus * frameTime;
+
                 //Player 1 liikkumis näppäimet, Player 1 on Vihreä
                 if (Raylib.IsKeyDown(KeyboardKey.W))
                 {
@@ -64,7 +69,7 @@ namespace Pong
                     p2Sijainti.Y += mailanNopeus;
                 }
 
-                //Player 1 ulsomeno Esto
+                //Player 1 ulosmeno Esto
                 if (p1Sijainti.Y >= (600 - (mailanKorkeus / 2)))
                 {
                     p1Sijainti.Y = (600 - (mailanKorkeus / 2));
@@ -84,10 +89,31 @@ namespace Pong
                     p2Sijainti.Y = (0 + (mailanKorkeus / 2));
                 }
 
+                //Saa poistaa 
+                //Väliaikaisia X suunnan palautus testaamista varten
+                if (pallonSijainti.X  >= 1000)
+                {
+                    pallonSuunta.X = -1;
+                }
+                if (pallonSijainti.X <= 0)
+                {
+                    pallonSuunta.X = 1;
+                }
+
+                //Ei saa poistaa, Tarkistaa näytön ylä ja ala reunan osuman
+                if (pallonSijainti.Y + 5 >= 600)
+                {
+                    pallonSuunta.Y = -1;
+                }
+                if (pallonSijainti.Y - 5 <= 0)
+                {
+                    pallonSuunta.Y = 1;
+                }
+
                 Raylib.BeginDrawing();
 
                 //Pallo
-                Raylib.DrawCircle((int)pallonAlkupiste.X, (int)pallonAlkupiste.Y, 10, Color.White);
+                Raylib.DrawCircle((int)pallonSijainti.X, (int)pallonSijainti.Y, 10, Color.White);
 
                 //Player 1 Pisteet
                 Raylib.DrawTextEx(Raylib.GetFontDefault(), p1Pistelaskuri, p1Pistesijainti, 40, 2, Color.Green);
