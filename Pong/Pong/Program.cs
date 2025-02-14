@@ -1,16 +1,13 @@
 ﻿using Raylib_cs;
 using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 
-
+//Vihreä pelaaja pelaa W ja A näppämillä
+//Punainen pelaaja pelaa Nuoli Ýlös ja Nuoli Alas Näppäimillä
 namespace Pong
 {
     internal class Program
     {
-
         //Pisteet
-        private static string p1Pistelaskuri = $"{p1Pisteet}";
-        private static string p2Pistelaskuri = $"{p2Pisteet}";
         private static float p1Pisteet = 0;
         private static float p2Pisteet = 0;
         static Vector2 p1Pistesijainti = new Vector2(400, 50);
@@ -42,6 +39,8 @@ namespace Pong
 
             Raylib.InitWindow((int)screenWidth, (int)screenHeight, "Pong");
 
+            
+
             while (!Raylib.WindowShouldClose())
             {
 
@@ -50,24 +49,14 @@ namespace Pong
                 pallonSijainti += pallonSuunta * pallonNopeus * frameTime;
 
                 //Player 1 liikkumis näppäimet, Player 1 on Vihreä
-                if (Raylib.IsKeyDown(KeyboardKey.W))
-                {
-                    p1Sijainti.Y -= mailanNopeus;
-                }
-                if (Raylib.IsKeyDown(KeyboardKey.S))
-                {
-                    p1Sijainti.Y += mailanNopeus;
-                }
+                if (Raylib.IsKeyDown(KeyboardKey.W)) p1Sijainti.Y -= mailanNopeus;
+                if (Raylib.IsKeyDown(KeyboardKey.S)) p1Sijainti.Y += mailanNopeus;
+                
 
                 //Player 2 liikkumis näppäimet, Player 2 on Punainen
-                if (Raylib.IsKeyDown(KeyboardKey.Up))
-                {
-                    p2Sijainti.Y -= mailanNopeus;
-                }
-                if (Raylib.IsKeyDown(KeyboardKey.Down))
-                {
-                    p2Sijainti.Y += mailanNopeus;
-                }
+                if (Raylib.IsKeyDown(KeyboardKey.Up)) p2Sijainti.Y -= mailanNopeus; 
+                if (Raylib.IsKeyDown(KeyboardKey.Down)) p2Sijainti.Y += mailanNopeus; 
+             
 
                 //Player 1 ulosmeno Esto
                 if (p1Sijainti.Y >= (600 - (mailanKorkeus / 2)))
@@ -89,26 +78,49 @@ namespace Pong
                     p2Sijainti.Y = (0 + (mailanKorkeus / 2));
                 }
 
-                //Saa poistaa 
-                //Väliaikaisia X suunnan palautus testaamista varten
-                if (pallonSijainti.X  >= 1000)
+                //Player 1 mailan koko
+                Rectangle p1Maila = new Rectangle(p1Sijainti.X - (mailanLeveys / 2), p1Sijainti.Y - (mailanKorkeus / 2), mailanLeveys, mailanKorkeus);
+                Rectangle p2Maila = new Rectangle(p2Sijainti.X - (mailanLeveys / 2), p2Sijainti.Y - (mailanKorkeus / 2), mailanLeveys, mailanKorkeus);
+
+                //Player 1 Piste Laskuri
+                if (pallonSijainti.X + 7 >= 1000)
                 {
-                    pallonSuunta.X = -1;
-                }
-                if (pallonSijainti.X <= 0)
-                {
+                    pallonSijainti = new Vector2(screenWidth / 2, screenHeight / 2);
                     pallonSuunta.X = 1;
                 }
 
+                if (pallonSijainti.X + 10 >= 1000)
+                {
+                    p1Pisteet += 1;
+                    Console.WriteLine("Player 1 on " + p1Pisteet + " Pistettä");
+                }
+
+                //Player 2 Piste Laskuri
+                if (pallonSijainti.X - 7 <= 0)
+                {
+                    pallonSijainti = new Vector2(screenWidth / 2, screenHeight / 2);
+                    pallonSuunta.X = -1;
+                }
+
+                if (pallonSijainti.X - 10 <= 0)
+                {
+                    p2Pisteet += 1;
+                    Console.WriteLine("Player 2 on" + p2Pisteet + " Pistettä");
+                }
+
+
                 //Ei saa poistaa, Tarkistaa näytön ylä ja ala reunan osuman
-                if (pallonSijainti.Y + 5 >= 600)
+                if (pallonSijainti.Y + 10 >= 600 || pallonSijainti.Y - 10 <= 0)
                 {
-                    pallonSuunta.Y = -1;
+                    pallonSuunta.Y *= -1;
                 }
-                if (pallonSijainti.Y - 5 <= 0)
+
+                if (Raylib.CheckCollisionCircleRec(pallonSijainti, 10, p1Maila) ||
+                    Raylib.CheckCollisionCircleRec(pallonSijainti, 10, p2Maila))
                 {
-                    pallonSuunta.Y = 1;
+                    pallonSuunta.X *= -1; // Käännetään X-suunta törmäyksessä
                 }
+
 
                 Raylib.BeginDrawing();
 
@@ -116,16 +128,17 @@ namespace Pong
                 Raylib.DrawCircle((int)pallonSijainti.X, (int)pallonSijainti.Y, 10, Color.White);
 
                 //Player 1 Pisteet
-                Raylib.DrawTextEx(Raylib.GetFontDefault(), p1Pistelaskuri, p1Pistesijainti, 40, 2, Color.Green);
+                Raylib.DrawTextEx(Raylib.GetFontDefault(), $"{p1Pisteet}", p1Pistesijainti, 40, 2, Color.Green);
 
                 //Player 2 Pisteet
-                Raylib.DrawTextEx(Raylib.GetFontDefault(), p2Pistelaskuri, p2Pistesijainti, 40, 2, Color.Red);
+                Raylib.DrawTextEx(Raylib.GetFontDefault(), $"{p2Pisteet}", p2Pistesijainti, 40, 2, Color.Red);
 
                 //Player 1
-                Raylib.DrawRectangle((int)p1Sijainti.X - (mailanLeveys / 2), (int)p1Sijainti.Y - (mailanKorkeus / 2), mailanLeveys, mailanKorkeus, Color.Green);
+                Raylib.DrawRectangleRec(p1Maila, Color.Green);
 
                 //Player 2
-                Raylib.DrawRectangle((int)p2Sijainti.X - (mailanLeveys / 2), (int)p2Sijainti.Y - (mailanKorkeus / 2), mailanLeveys, mailanKorkeus, Color.Red);
+                Raylib.DrawRectangleRec(p2Maila, Color.Red);
+                
 
                 Raylib.ClearBackground(Color.Black);
 
