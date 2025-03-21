@@ -2,7 +2,6 @@
 using System.Numerics;
 
 //Vihreä pelaaja pelaa W ja A näppämillä
-//Punainen pelaaja pelaa Nuoli Ýlös ja Nuoli Alas Näppäimillä
 namespace Pong
 {
     internal class Program
@@ -27,7 +26,7 @@ namespace Pong
         private static int mailanKorkeus = 50;
 
         //Pallon ominaisuudet
-        private static int pallonNopeus = 200;
+        private static int pallonNopeus = 2000;
         static Vector2 pallonSuunta = new Vector2(1, -1); 
         static Vector2 pallonSijainti = new Vector2(screenWidth /2, screenHeight /2);
 
