@@ -3,14 +3,18 @@ using System.Numerics;
 
 namespace Asteroids
 {
+
     internal class Program
     {
+        Vector2 playerPosition = new Vector2(400, 400);
+        int playerRotation = 0;
         Texture2D playerShipTexture;
 
         static void Main(string[] args)
         {
             Program game = new Program();
             game.Init();
+            
         }
 
         void Init()
@@ -30,10 +34,15 @@ namespace Asteroids
         {
             while (!Raylib.WindowShouldClose())
             {
+                if (Raylib.IsKeyDown(KeyboardKey.A))
+                {
+                    playerRotation += 10;
+                }
+
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
 
-                Raylib.DrawTexture(playerShipTexture, 10, 10, Color.Red);
+                Raylib.DrawTexturePro(playerShipTexture, playerPosition, , playerRotation, Color.Red);
 
 
                 Raylib.EndDrawing();
