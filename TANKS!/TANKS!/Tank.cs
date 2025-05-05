@@ -19,6 +19,7 @@ public class Tank
     int speed = 2;
     public Color color;
     public KeyboardKey Up, Down, Left, Right, Space;
+    public bool isAlive = true;
 
     public Tank(Vector2 startPos, KeyboardKey upKey, KeyboardKey downKey, KeyboardKey leftKey, KeyboardKey rightKey, KeyboardKey shootKey, Color color)
     {
@@ -33,6 +34,8 @@ public class Tank
 
     public void DrawTank(Rectangle wall1, Rectangle wall2)
     {
+        if (!isAlive) return;
+
         Raylib.DrawRectangle((int)position.X - (tankWidth / 2), (int)position.Y - tankHeight / 2, tankWidth, tankHeight, color);
 
         if (Raylib.IsKeyDown(Up) && !CheckCollision(position.X, position.Y - speed, wall1, wall2))
@@ -85,6 +88,10 @@ public class Tank
             return canShoot;
         }
         else return false;
+    }
+    public Rectangle GetTankRectangle()
+    {
+        return new Rectangle(position.X - 20, position.Y - 20, 40, 40); 
     }
 }
 
