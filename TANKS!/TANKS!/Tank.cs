@@ -30,6 +30,7 @@ public class Tank
         Right = rightKey;
         Space = shootKey;
         this.color = color;
+        isAlive = true;
     }
 
     public void DrawTank(Rectangle wall1, Rectangle wall2)

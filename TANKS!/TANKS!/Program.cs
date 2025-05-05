@@ -86,10 +86,11 @@ internal class TANKS
 
                 if (Raylib.GetTime() - gameOverTime >= 3)
                 {
-                    tank1 = new Tank(p2sijainti, KeyboardKey.Up, KeyboardKey.Down, KeyboardKey.Left, KeyboardKey.Right, KeyboardKey.Enter, Color.Green);
-                    tank2 = new Tank(p1sijainti, KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D, KeyboardKey.Space, Color.Red);
+                    tank1 = new Tank(p1sijainti, KeyboardKey.W, KeyboardKey.S, KeyboardKey.A, KeyboardKey.D, KeyboardKey.Space, Color.Red);
+                    tank2 = new Tank(p2sijainti, KeyboardKey.Up, KeyboardKey.Down, KeyboardKey.Left, KeyboardKey.Right, KeyboardKey.Enter, Color.Green);
                     Ammukset.Clear();
                     gameOver = false;
+                    
                 }
 
             }
