@@ -56,7 +56,6 @@ internal class TANKS
                     Raylib.CheckCollisionCircleRec(ammus.sijainti, 10, wall2))
                 {
                     Ammukset.RemoveAt(i);
-                    continue;
                 }
 
                 if (tank1.isAlive && Raylib.CheckCollisionCircleRec(ammus.sijainti, 10, tank1.GetTankRectangle()) && ammus.omistaja != tank1)
@@ -65,7 +64,6 @@ internal class TANKS
                     Ammukset.RemoveAt(i);
                     gameOver = true;
                     gameOverTime = Raylib.GetTime();
-                    continue;
                 }
 
                 if (tank2.isAlive && Raylib.CheckCollisionCircleRec(ammus.sijainti, 10, tank2.GetTankRectangle()) && ammus.omistaja != tank2)
@@ -74,7 +72,6 @@ internal class TANKS
                     Ammukset.RemoveAt(i);
                     gameOver = true;
                     gameOverTime = Raylib.GetTime();
-                    continue;
                 }
             }
 
@@ -85,7 +82,7 @@ internal class TANKS
                 else if (!tank2.isAlive && tank1.isAlive)
                     Raylib.DrawText("RED TANK WINS!", ruudunLeveys / 2 - 150, ruudunKorkeus / 2, 40, Color.Red);
                 else if (!tank1.isAlive && !tank2.isAlive)
-                    Raylib.DrawText("BOTH TANKS DESTROYED!", ruudunLeveys / 2 - 200, ruudunKorkeus / 2, 40, Color.White);
+                    Raylib.DrawText("BOTH TANKS DESTROYED!", ruudunLeveys / 2 - 200, ruudunKorkeus / 2, 40, Color.LightGray);
 
                 if (Raylib.GetTime() - gameOverTime >= 3)
                 {
