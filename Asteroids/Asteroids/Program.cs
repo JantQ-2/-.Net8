@@ -3,47 +3,41 @@ using System.Numerics;
 
 namespace Asteroids
 {
-
     internal class Program
     {
-        Vector2 playerPosition = new Vector2(400, 400);
-        int playerRotation = 0;
-        Texture2D playerShipTexture;
+        Player player;
+        public static Vector2 screenSize = new Vector2(1500, 950);
 
         static void Main(string[] args)
         {
+
             Program game = new Program();
             game.Init();
-            
+            game.GameLoop();
+            Raylib.CloseWindow();
         }
 
         void Init()
         {
-            Raylib.InitWindow(800, 800, "Asteroids");
+            Raylib.InitWindow((int)screenSize.X, (int)screenSize.Y, "Asteroids");
             Raylib.SetTargetFPS(60);
 
-            playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
+            player = new Player();
 
-
-            GameLoop();
-
-            Raylib.CloseWindow();
+            if (Raylib.IsKeyDown(KeyboardKey.Escape))
+            {
+                Raylib.CloseWindow();
+            }
         }
 
         void GameLoop()
         {
             while (!Raylib.WindowShouldClose())
             {
-                if (Raylib.IsKeyDown(KeyboardKey.A))
-                {
-                    playerRotation += 10;
-                }
-
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
 
-                Raylib.DrawTexturePro(playerShipTexture, playerPosition, , playerRotation, Color.Red);
-
+                player.DrawPlayer();
 
                 Raylib.EndDrawing();
             }
