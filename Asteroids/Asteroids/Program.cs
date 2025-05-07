@@ -6,7 +6,7 @@ namespace Asteroids
     internal class Program
     {
         Player player;
-        public static Vector2 screenSize = new Vector2(1500, 950);
+        public static Vector2 screenSize = new Vector2(1800, 950);
 
         static void Main(string[] args)
         {
@@ -38,6 +38,7 @@ namespace Asteroids
                 Raylib.ClearBackground(Color.Black);
 
                 player.DrawPlayer();
+                player.SideSwapper();
 
                 Raylib.EndDrawing();
             }

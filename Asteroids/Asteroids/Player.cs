@@ -12,7 +12,6 @@ public class Player
     float acceleration = 0.1f;
     float friction = 0.99f;
     float rotationSpeed = 3f;
-    float maxSpeed = 5f;
 
     public Player()
     {
@@ -56,5 +55,26 @@ public class Player
 
         
         playerPosition += velocity;
+    }
+    public void SideSwapper()
+    {
+        if (playerPosition.X > Program.screenSize.X)
+        {
+            playerPosition.X = 0;
+        }
+        else if (playerPosition.X < 0)
+        {
+            playerPosition.X = Program.screenSize.X;
+        }
+
+        if (playerPosition.Y > Program.screenSize.Y)
+        {
+            playerPosition.Y = 0; 
+        }
+        else if (playerPosition.Y < 0)
+        {
+            playerPosition.Y = Program.screenSize.Y; 
+        }
+
     }
 }
