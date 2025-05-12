@@ -1,5 +1,9 @@
-﻿using Raylib_cs;
+﻿using Newtonsoft.Json;
+using Raylib_cs;
+using System;
 using System.Numerics;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Asteroids
 {
@@ -7,18 +11,19 @@ namespace Asteroids
     {
         Player player;
         public static Vector2 screenSize = new Vector2(1800, 950);
-
         static void Main(string[] args)
         {
 
             Program game = new Program();
             game.Init();
+            
             game.GameLoop();
             Raylib.CloseWindow();
         }
 
         void Init()
         {
+            Player.Init();
             Raylib.InitWindow((int)screenSize.X, (int)screenSize.Y, "Asteroids");
             Raylib.SetTargetFPS(60);
 
@@ -32,6 +37,10 @@ namespace Asteroids
 
         void GameLoop()
         {
+            var dataHandler = new GameData();
+            ShipData currentShip = dataHandler.LoadShipData();
+            dataHandler.SaveShipData();
+
             while (!Raylib.WindowShouldClose())
             {
                 Raylib.BeginDrawing();
@@ -42,6 +51,8 @@ namespace Asteroids
 
                 Raylib.EndDrawing();
             }
+
+            dataHandler.SaveShipData();
         }
     }
 }

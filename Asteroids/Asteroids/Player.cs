@@ -4,17 +4,44 @@ using System.Numerics;
 
 public class Player
 {
-    Vector2 playerPosition = new Vector2(Program.screenSize.X / 2, Program.screenSize.Y / 2);
+    public static Vector2 playerPosition;
     Vector2 velocity = new Vector2(0, 0);
-    float playerRotation = 0;
+    public static float playerRotation = 0;
     Texture2D playerShipTexture;
 
     float acceleration = 0.1f;
     float rotationSpeed = 3;
     float maxSpeed = 20;
+
     public Player()
     {
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
+        LoadPlayerData();
+    }
+
+    public static void Init()
+    {
+        var savedData = new GameData().LoadShipData();
+        if (savedData != null)
+        {
+            playerPosition = new Vector2(savedData.Position.X, savedData.Position.Y);
+            playerRotation = savedData.Rotation.PlayerRotation;
+        }
+        else
+        {
+            playerPosition = new Vector2(Program.screenSize.X / 2, Program.screenSize.Y / 2);
+            playerRotation = 0;
+        }
+    }
+
+    public void LoadPlayerData()
+    {
+        var savedData = new GameData().LoadShipData();
+        if (savedData != null)
+        {
+            playerPosition = new Vector2(savedData.Position.X, savedData.Position.Y);
+            playerRotation = savedData.Rotation.PlayerRotation;
+        }
     }
 
     public void DrawPlayer()
@@ -64,6 +91,7 @@ public class Player
         if (playerPosition.X > Program.screenSize.X)
         {
             playerPosition.X = 0;
+            
         }
         else if (playerPosition.X < 0)
         {
