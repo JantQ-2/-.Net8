@@ -10,9 +10,8 @@ public class Player
     Texture2D playerShipTexture;
 
     float acceleration = 0.1f;
-    float friction = 0.99f;
-    float rotationSpeed = 3f;
-
+    float rotationSpeed = 3;
+    float maxSpeed = 20;
     public Player()
     {
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
@@ -51,10 +50,14 @@ public class Player
             velocity += direction * acceleration;
         }
 
-        velocity *= friction;
 
-        
+
         playerPosition += velocity;
+
+        if (velocity.Length() > maxSpeed)
+        {
+            velocity = Vector2.Normalize(velocity) * maxSpeed;
+        }
     }
     public void SideSwapper()
     {
@@ -69,11 +72,11 @@ public class Player
 
         if (playerPosition.Y > Program.screenSize.Y)
         {
-            playerPosition.Y = 0; 
+            playerPosition.Y = 0;
         }
         else if (playerPosition.Y < 0)
         {
-            playerPosition.Y = Program.screenSize.Y; 
+            playerPosition.Y = Program.screenSize.Y;
         }
 
     }
