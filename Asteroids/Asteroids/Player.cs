@@ -12,11 +12,20 @@ public class Player
     float acceleration = 0.1f;
     float rotationSpeed = 3;
     float maxSpeed = 20;
+    int playerHealth = 5;
+
+    const int MaxBullets = 16;
+    Bullet[] bullets = new Bullet[MaxBullets];
+    int fireCooldownFrames = 15;   // ~0.25s cooldown at 60 FPS
+    const int fireDelayFrames = 7; // ~9 shots/sec at 60 FPS
+    const float bulletSpeedPerFrame = 15f; // 15 pixels per frame at 60 FPS
+    const int bulletLifeFrames = 120;       // 2s at 60 FPS 
 
     public Player()
     {
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
         LoadPlayerData();
+        Vector2 GetHalfSize(float scale) => new Vector2(playerShipTexture.Width * scale * 0.5f, playerShipTexture.Height * scale * 0.5f);
     }
 
     public static void Init()
@@ -48,6 +57,11 @@ public class Player
     {
         KeyDown();
 
+        // Bullet
+        for (int i = 0; i < bullets.Length; i++)
+            if (bullets[i].Active)
+                bullets[i].Update(Program.screenSize);
+
         Rectangle sourceRec = new Rectangle(0, 0, playerShipTexture.Width, playerShipTexture.Height);
 
         float scale = 1.5f;
@@ -56,10 +70,19 @@ public class Player
         Vector2 origin = new Vector2(playerShipTexture.Width * scale / 2, playerShipTexture.Height * scale / 2);
 
         Raylib.DrawTexturePro(playerShipTexture, sourceRec, destRec, origin, playerRotation, Color.White);
+
+        // Draw Bullet
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            if (!bullets[i].Active) continue;
+            Raylib.DrawCircleV(bullets[i].Position, 3f, Color.White);
+        }
     }
+
 
     public void KeyDown()
     {
+        // Turn
         if (Raylib.IsKeyDown(KeyboardKey.A))
         {
             playerRotation -= rotationSpeed;
@@ -69,12 +92,21 @@ public class Player
             playerRotation += rotationSpeed;
         }
 
+        // Forward depending on angle
         if (Raylib.IsKeyDown(KeyboardKey.W))
         {
             float radians = MathF.PI / 180f * (playerRotation - 90);
             Vector2 direction = new Vector2(MathF.Cos(radians), MathF.Sin(radians));
 
             velocity += direction * acceleration;
+        }
+
+        // Shoot
+        if (fireCooldownFrames > 0) fireCooldownFrames--;
+        if (Raylib.IsKeyDown(KeyboardKey.Space) && fireCooldownFrames <= 0)
+        {
+            FireBullet();
+            fireCooldownFrames = fireDelayFrames;
         }
 
 
@@ -108,4 +140,31 @@ public class Player
         }
 
     }
+    void FireBullet()
+    {
+        float rad = (playerRotation - 90f) * (MathF.PI / 180f);
+        Vector2 dir = new Vector2(MathF.Cos(rad), MathF.Sin(rad));
+
+       
+        float scale = 1.5f;
+        float halfHeight = (playerShipTexture.Height * scale) * 0.5f;
+        Vector2 spawn = playerPosition + dir * halfHeight;
+
+      
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            if (bullets[i].Active) continue;
+
+            bullets[i] = new Bullet
+            {
+                Position = spawn,
+                Velocity = dir * bulletSpeedPerFrame + (velocity * 0.25f),
+                LifeFrames = bulletLifeFrames,
+                Active = true
+            };
+            break; 
+        }
+    }
+
+
 }

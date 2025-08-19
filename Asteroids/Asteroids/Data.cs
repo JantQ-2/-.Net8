@@ -14,10 +14,9 @@ namespace Asteroids
                 Console.WriteLine("No save file found - using default values");
                 return null;
             }
-
             string json = File.ReadAllText(FilePath);
             return JsonConvert.DeserializeObject<ShipData>(json);
-
+            
         }
 
         public void SaveShipData()
@@ -38,6 +37,7 @@ namespace Asteroids
 
             if (!Directory.Exists(DataFolder))
             {
+                Console.WriteLine(FilePath, " created");
                 Directory.CreateDirectory(DataFolder);
             }
 
