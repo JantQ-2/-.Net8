@@ -14,12 +14,15 @@ public class Player
     float maxSpeed = 20;
     int playerHealth = 5;
 
-    const int MaxBullets = 16;
+    const int MaxBullets = 8;
     Bullet[] bullets = new Bullet[MaxBullets];
-    int fireCooldownFrames = 15;   // ~0.25s cooldown at 60 FPS
+    int fireCooldownFrames = 15;   // 15f per Frame
     const int fireDelayFrames = 7; // ~9 shots/sec at 60 FPS
     const float bulletSpeedPerFrame = 15f; // 15 pixels per frame at 60 FPS
     const int bulletLifeFrames = 120;       // 2s at 60 FPS 
+
+    public Bullet[] GetBullets() => bullets;
+
 
     public Player()
     {

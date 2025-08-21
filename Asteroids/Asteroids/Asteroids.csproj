@@ -15,11 +15,15 @@
 
   <ItemGroup>
     <None Remove="images\Looting_5.png" />
+    <None Remove="images\more_images\PNG\Meteors\meteorGrey_big1.png" />
     <None Remove="images\more_images\PNG\playerShip1_red.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="images\Looting_5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\more_images\PNG\Meteors\meteorGrey_big1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\more_images\PNG\playerShip1_red.png">
