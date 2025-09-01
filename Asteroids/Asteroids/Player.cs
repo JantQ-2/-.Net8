@@ -20,12 +20,14 @@ public class Player
     const int fireDelayFrames = 7; // ~9 shots/sec at 60 FPS
     const float bulletSpeedPerFrame = 15f; // 15 pixels per frame at 60 FPS
     const int bulletLifeFrames = 120;       // 2s at 60 FPS 
+    public static Player Instance { get; private set; }
 
     public Bullet[] GetBullets() => bullets;
 
 
     public Player()
     {
+        Instance = this;
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
         LoadPlayerData();
         Vector2 GetHalfSize(float scale) => new Vector2(playerShipTexture.Width * scale * 0.5f, playerShipTexture.Height * scale * 0.5f);
@@ -33,7 +35,7 @@ public class Player
 
     public static void Init()
     {
-        var savedData = new GameData().LoadShipData();
+        var savedData = GameData.LoadShipData();
         if (savedData != null)
         {
             playerPosition = new Vector2(savedData.Position.X, savedData.Position.Y);
@@ -48,7 +50,7 @@ public class Player
 
     public void LoadPlayerData()
     {
-        var savedData = new GameData().LoadShipData();
+        var savedData = GameData.LoadShipData();
         if (savedData != null)
         {
             playerPosition = new Vector2(savedData.Position.X, savedData.Position.Y);

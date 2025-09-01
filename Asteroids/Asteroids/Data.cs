@@ -7,7 +7,7 @@ namespace Asteroids
         private static readonly string DataFolder = Path.Combine(Directory.GetCurrentDirectory(), "Data");
         private static readonly string FilePath = Path.Combine(DataFolder, "ship_data.json");
 
-        public ShipData LoadShipData()
+        public static ShipData LoadShipData()
         {
             if (!File.Exists(FilePath))
             {
@@ -19,7 +19,7 @@ namespace Asteroids
             
         }
 
-        public void SaveShipData()
+        public static void SaveShipData()
         {
 
             var ship = new ShipData
