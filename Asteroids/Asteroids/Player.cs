@@ -7,8 +7,10 @@ public class Player
     public static Vector2 playerPosition;
     Vector2 velocity = new Vector2(0, 0);
     public static float playerRotation = 0;
-    Texture2D playerShipTexture;
+    public static Texture2D playerShipTexture;
 
+
+    public float Scale;
     float acceleration = 0.1f;
     float rotationSpeed = 3;
     float maxSpeed = 20;
@@ -25,13 +27,15 @@ public class Player
     public Bullet[] GetBullets() => bullets;
 
 
+    // In Player.cs constructor
     public Player()
     {
         Instance = this;
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
+        Scale = 1.5f;                // <-- IMPORTANT: used by GetPlayerRadius
         LoadPlayerData();
-        Vector2 GetHalfSize(float scale) => new Vector2(playerShipTexture.Width * scale * 0.5f, playerShipTexture.Height * scale * 0.5f);
     }
+
 
     public static void Init()
     {
@@ -171,5 +175,15 @@ public class Player
         }
     }
 
+    void GetPlayerWidth()
+    {
 
+    }
+
+    public static float GetPlayerRadius(Player p)
+    {
+        if (p == null) return 0f;
+        float baseRadius = playerShipTexture.Width * p.Scale * 0.5f;
+        return baseRadius * 0.45f;
+    }
 }

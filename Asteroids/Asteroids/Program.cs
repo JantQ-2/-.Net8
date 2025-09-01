@@ -9,6 +9,7 @@ namespace Asteroids
     {
         Player player;
         int currentWave = 1;
+        public static bool isGameOver = false;
         public static Vector2 screenSize = new Vector2(1800, 950);
         static void Main(string[] args)
         {
@@ -52,22 +53,28 @@ namespace Asteroids
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
 
-                player.DrawPlayer();
-                player.SideSwapper();
-
-                Asteroid.UpdateAsteroids();
-                Asteroid.DrawAsteroids();
-
-                Asteroid.HandleBulletAsteroidCollisions();
-
-                if (Asteroid.CountActiveAsteroids() == 0)
+                if (!isGameOver)
                 {
-                    StartNextWave();
+                    player.DrawPlayer();
+                    player.SideSwapper();
+
+                    Asteroid.UpdateAsteroids();
+                    Asteroid.DrawAsteroids();
+
+                    Asteroid.HandleBulletAsteroidCollisions();
+
+                    // GAME OVER check
+                    if (Asteroid.IsPlayerColliding(player))
+                        isGameOver = true;
+
+                    // Next wave
+                    if (Asteroid.CountActiveAsteroids() == 0)
+                        StartNextWave();
                 }
-
-
+                
                 Raylib.EndDrawing();
             }
+
 
             GameData.SaveShipData();
         }

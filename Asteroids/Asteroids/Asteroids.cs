@@ -10,6 +10,7 @@ public class Asteroid
     public float RotationSpeedDeg;
     public float Scale;
     public bool Active;
+    public static float speedScale = 0.5f;
 
     public static Texture2D asteroidTexture;
     const int MaxAsteroids = 12;
@@ -22,7 +23,7 @@ public class Asteroid
     {
         if (!Active) return;
 
-        Position += Velocity;
+        Position += Velocity * speedScale;
         RotationDeg += RotationSpeedDeg;
 
         if (Position.X > screenSize.X) Position.X = 0;
@@ -196,4 +197,26 @@ public class Asteroid
         }
         return -1;
     }
+    public static bool IsPlayerColliding(Player p)
+    {
+        if (p == null) return false;
+
+        float pr = Player.GetPlayerRadius(p);        
+        float pr2 = pr * pr;
+
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            var a = asteroids[i];
+            if (a == null || !a.Active) continue;
+
+            float ar = GetAsteroidRadius(a);         
+            float rr = pr + ar;
+
+            Vector2 d = Player.playerPosition - a.Position;
+            if (Vector2.Dot(d, d) <= rr * rr)        
+                return true;
+        }
+        return false;
+    }
+
 }
