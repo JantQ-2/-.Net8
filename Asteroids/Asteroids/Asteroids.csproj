@@ -36,4 +36,8 @@
     <PackageReference Include="Raylib-cs" Version="7.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Omat\TimeOutStuff\TimeOutStuff\TimeOutStuff.csproj" />
+  </ItemGroup>
+
 </Project>

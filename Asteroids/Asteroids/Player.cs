@@ -32,7 +32,7 @@ public class Player
     {
         Instance = this;
         playerShipTexture = Raylib.LoadTexture("images/more_images/PNG/playerShip1_red.png");
-        Scale = 1.5f;                // <-- IMPORTANT: used by GetPlayerRadius
+        Scale = 1.5f;                
         LoadPlayerData();
     }
 

@@ -2,6 +2,7 @@
 using Raylib_cs;
 using System;
 using System.Numerics;
+using TimeOutStuff;
 
 namespace Asteroids
 {
@@ -13,12 +14,23 @@ namespace Asteroids
         public static Vector2 screenSize = new Vector2(1800, 950);
         static void Main(string[] args)
         {
-            
+
+            //LIbrary, Halusin lisätä JavaScriptistä Tutun SetTimeout en tiiä käytänkö
+            Timings.SetTimeout(3, () =>
+            {
+                Console.WriteLine(screenSize);
+            });
+            //Library, Halusin myös lisätä itselleni Tick() joka toteuttaa itsensä joka 0.1s (100ms)
+            Timings.Tick(() =>
+            {
+                Console.WriteLine(DateTime.Now);
+            });
 
             Program game = new Program();
             game.Init();
             
             game.GameLoop();
+            
             Raylib.CloseWindow();
         }
 
@@ -63,13 +75,14 @@ namespace Asteroids
 
                     Asteroid.HandleBulletAsteroidCollisions();
 
-                    // GAME OVER check
                     if (Asteroid.IsPlayerColliding(player))
                         isGameOver = true;
 
-                    // Next wave
                     if (Asteroid.CountActiveAsteroids() == 0)
-                        StartNextWave();
+                        Timings.SetTimeout(3, () =>
+                        {
+                            StartNextWave();
+                        });
                 }
                 
                 Raylib.EndDrawing();
